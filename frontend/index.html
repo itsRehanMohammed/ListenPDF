@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF to Audio Converter</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              clifford: "#da373d",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body id="theme">
+    <!-- <h1 class="text-3xl font-bold underline text-clifford">Hello world!</h1> -->
+    <header class="text-gray-600 body-font">
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+          <span class="ml-3 text-xl">ListenPDF</span>
+        </a>
+        <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center"></nav>
+        <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="text-gray-600 body-font">
+      <div class="container mx-auto flex flex-col px-5 pt-14 pb-6 justify-center items-center">
+        <div class="w-full md:w-2/3 flex flex-col items-center text-center mb-8">
+          <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">ListenPDF: Transforming PDF into Sound</h1>
+          <p class="mb-8 leading-relaxed">Welcome to ListenPDF, where text becomes speech. Convert PDFs into immersive audio effortlessly. Say goodbye to reading and hello to listening, anytime, anywhere. Dive into ListenPDF and experience words like never before.</p>
+          <div class="flex w-full justify-center items-end space-x-4">
+            <div class="relative w-2/3 text-left">
+              <label for="hero-field" class="leading-7 text-sm text-gray-600">Choose PDF File</label>
+              <input
+                type="file"
+                id="pdfFileInput"
+                accept=".pdf"
+                name="hero-field"
+                class="w-full bg-gray-100 bg-opacity-50 rounded focus:ring-2 focus:ring-indigo-200 focus:bg-transparent border border-gray-300 focus:border-indigo-500 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              />
+            </div>
+            <button onclick="convertToAudio()" class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Convert to Audio</button>
+            <a id="downloadLink" style="display: none" download="output.mp3"><button class="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Download Audio</button></a>
+          </div>
+        </div>
+
+        <div class="flex justify-center items-center w-3/4 space-x-4">
+          <div class="bg-gray-200 rounded-lg shadow-lg p-4 w-3/4">
+            <audio id="audioPlayer" controls class="w-full">
+              <source src="audio.mp3" type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+            <div class="flex justify-center mt-4" id="audioName"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="text-gray-600 body-font">
+      <div class="container px-5 py-8 mx-auto flex items-center flex-col">
+        <a class="flex title-font font-medium items-center justify-center text-gray-900"> </a>
+        <p class="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
+          © 2024 ListenPDF — <a class="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank">Made with ❣️</a><a class="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank">by Raano</a>
+        </p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
